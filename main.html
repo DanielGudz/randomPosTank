@@ -1,0 +1,83 @@
+<html> 
+ <head>
+    <title></title> 
+</head>
+ <body>
+    <p align="center"> 
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body> 
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
+ <script>
+var sketchProc = function(processingInstance) {
+with (processingInstance) {
+//START
+size(400, 400); 
+frameRate(120);
+
+//println("isValidPos");
+var Tank = function(x,y) {
+    this.x = x;
+    this.y = y;
+    this.draw = function() {
+        fill(255, 255, 255);
+        rect(this.x, this.y, 20, 20);
+    };
+    this.isOcupiedPos = function(x,y){
+        if (this.x - 20 < x && this.x + 20 > x && this.y - 20 < y  && this.y + 20 > y){
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    };
+};
+
+var Board = function(){
+    this.tanks = [];
+    this.init = function(numTanks) {
+        for (var i = 0; i < numTanks; i++) {
+            var x = floor(random(0, 380));
+            var y = floor(random(0, 380));
+            if (this.isValidPos(x,y)) {
+                var tank = new Tank(x, y);
+                this.tanks.push(tank);
+            }
+        }
+    };
+    this.draw = function() {
+        for (var i = 0; i < this.tanks.length; i++) {
+            this.tanks[i].draw();
+        }
+    };
+    this.isValidPos = function(x, y){
+        for (var i = 0; i < this.tanks.length; i++) {
+            if(this.tanks[i].isOcupiedPos(x, y)){
+                return 0;
+            }
+        }
+        return 1;
+    };
+};
+
+var board = new Board();
+board.init(6);
+
+draw = function() {
+    background(110, 80, 110);
+    board.draw();
+};
+
+
+
+
+
+//END
+}
+};
+
+var canvas = document.getElementById("mycanvas"); 
+var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
+</html>
